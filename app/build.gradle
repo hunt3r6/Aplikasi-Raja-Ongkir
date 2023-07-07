@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -15,6 +16,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        buildConfigField "String", "API_KEY", "\"${properties.getProperty("API_KEY")}\""
     }
 
     buildTypes {
@@ -34,12 +39,17 @@ android {
     viewBinding {
         enabled = true
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
 
-    def lifecycle_version = "2.6.0-alpha05"
+    def lifecycle_version = "2.6.1"
     def retrofit_version = "2.9.0"
+    def okhttp3_version = "5.0.0-alpha.2"
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -55,6 +65,9 @@ dependencies {
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    //okhttp
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
