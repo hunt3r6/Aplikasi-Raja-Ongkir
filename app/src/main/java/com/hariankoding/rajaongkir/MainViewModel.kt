@@ -22,8 +22,8 @@ class MainViewModel : ViewModel() {
     private var _city = MutableLiveData<List<City>>()
     val city: LiveData<List<City>> get() = _city
 
-    private var _cost = MutableLiveData<List<CostsItem>>()
-    val cost: LiveData<List<CostsItem>> get() = _cost
+    private var _cost = MutableLiveData<Resource<List<CostsItem>>>()
+    val cost: LiveData<Resource<List<CostsItem>>> get() = _cost
 
     private fun getProvince() {
         viewModelScope.launch {
@@ -51,7 +51,7 @@ class MainViewModel : ViewModel() {
         weight: Int
     ) {
         viewModelScope.launch {
-
+            _cost.value = Resource.Loading
             try {
                 val result = ApiConfig.getApiService().getCost(
                     key = apiKey,
@@ -60,9 +60,9 @@ class MainViewModel : ViewModel() {
                     courier = courier,
                     weight = weight
                 )
-                _cost.value = result.rajaongkir.result[0].costs
+                _cost.value = Resource.Success(result.rajaongkir.result[0].costs)
             } catch (e: Exception) {
-                Log.e("MainViewModel", e.toString())
+                _cost.value = Resource.Error(e.toString())
             }
 
         }

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.hariankoding.rajaongkir.databinding.FragmentResultCostBinding
+import com.hariankoding.rajaongkir.remote.Resource
 
 class ResultCostFragment : BottomSheetDialogFragment() {
 
@@ -51,9 +52,21 @@ class ResultCostFragment : BottomSheetDialogFragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        mainViewModel.cost.observe(viewLifecycleOwner) { costsItem ->
-            costAdapter.submitList(costsItem)
+        mainViewModel.cost.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
 
+                is Resource.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    costAdapter.submitList(resource.data)
+                }
+
+                is Resource.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                }
+            }
         }
     }
 

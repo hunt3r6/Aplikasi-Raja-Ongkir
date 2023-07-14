@@ -15,9 +15,19 @@
         android:textAllCaps="true"
         android:textSize="24sp" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:indeterminate="true" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_costs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp" />
+
+
 </LinearLayout>
